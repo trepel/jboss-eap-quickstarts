@@ -21,6 +21,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.logging.Logger;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
@@ -49,9 +50,15 @@ public class PaymentBean implements Serializable {
     @Debit
     Event<PaymentEvent> debitEventProducer;
 
-    private BigDecimal amount = new BigDecimal(10.0);
+    private BigDecimal amount;
 
-    private PaymentTypeEnum paymentOption = PaymentTypeEnum.DEBIT;
+    private PaymentTypeEnum paymentOption;
+
+    @PostConstruct
+    private void init() {
+        amount = new BigDecimal(10.0);
+        paymentOption = PaymentTypeEnum.DEBIT;
+    }
 
     // Pay Action
     public String pay() {
@@ -84,9 +91,7 @@ public class PaymentBean implements Serializable {
 
     // Reset Action
     public void reset() {
-        amount = null;
-        paymentOption = null;
-
+        init();
     }
 
     public Event<PaymentEvent> getCreditEventLauncher() {
